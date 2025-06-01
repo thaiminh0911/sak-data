@@ -23,7 +23,7 @@ paths:
           required: true
           description: User's Chat ID.
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: OTP sent successfully.
