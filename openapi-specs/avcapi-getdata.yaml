@@ -1,16 +1,16 @@
 openapi: 3.0.0
 info:
-  title: AppVerify Code API for Telegram - OTP Verification
-  description: API endpoint for verifying OTP via Telegram bot.
+  title: AppVerify Code API - Get Data
+  description: API endpoint for retrieving app's information using AVC Authkey.
   version: 1.0.0
 servers:
   - url: https://avc.vercel.app
     description: Production server
 paths:
-  /api/telegram/otpVerification:
-    post:
-      summary: AppVerify Code API for Telegram - OTP Verification
-      description: Send an OTP code to user via AVCBot.
+  /api/getData:
+    get:
+      summary: Retrieve app's information.
+      description: Retrieve app's information using AVC Authkey.
       parameters:
         - name: authkey
           in: query
@@ -18,15 +18,9 @@ paths:
           description: Your app's AVC Authkey.
           schema:
             type: string
-        - name: chatid
-          in: query
-          required: true
-          description: User's Chat ID.
-          schema:
-            type: integer
       responses:
         '200':
-          description: OTP sent successfully.
+          description: Your app's information retrieved successfully.
           content:
             application/json:
               schema:
@@ -34,10 +28,13 @@ paths:
                 properties:
                   restful_method:
                     type: string
-                    example: POST
+                    example: GET
                   response_code:
                     type: string
                     example: '200'
+                  authkey:
+                    type: string
+                    description: Your app's AVC Authkey.
                   status:
                     type: string
                     example: found
@@ -53,17 +50,8 @@ paths:
                       tg_appbot:
                         type: string
                         description: Username of your app's bot.
-                  sentTo:
-                    type: object
-                    properties:
-                      chatid:
-                        type: string
-                        description: User's Chat ID.
-                  verification_code:
-                    type: integer
-                    description: Generated OTP code.
         '400':
-          description: Missing required parameters.
+          description: Missing required parameter.
           content:
             application/json:
               schema:
@@ -71,7 +59,7 @@ paths:
                 properties:
                   error:
                     type: string
-                    example: The 'authkey' and 'chatid' parameters are required.
+                    example: The 'authkey' parameter is required.
         '404':
           description: Authkey not found.
           content:
@@ -81,7 +69,7 @@ paths:
                 properties:
                   restful_method:
                     type: string
-                    example: POST
+                    example: GET
                   response_code:
                     type: string
                     example: '404'
@@ -89,7 +77,7 @@ paths:
                     type: string
                     example: The provided 'authkey' was not found.
         '500':
-          description: Internal server error (Database or Telegram API failure).
+          description: Internal server error (Database failure).
           content:
             application/json:
               schema:
